@@ -1,0 +1,10 @@
+{
+  "name": "noise",
+  "version": "0.1.0",
+  "description": "벽을 통과한 저주파 소음의 실내 방해지수(I)를 측정/표시/신고하는 웹 앱",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

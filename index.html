@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>소음 방해지수 측정기</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>소음 방해지수 측정기</h1>
+    <p class="subtitle">
+      마이크로 주변 소음을 감지하여 벽 투과 및 저주파 보정을 반영한 방해지수 <em>I</em>를 계산합니다.
+    </p>
+
+    <section class="controls">
+      <button id="startBtn">측정 시작</button>
+      <button id="stopBtn" disabled>측정 정지</button>
+      <span id="status">대기 중</span>
+    </section>
+
+    <p id="errorBox" class="error" hidden></p>
+
+    <section class="panel">
+      <h2>실시간 지표</h2>
+      <div class="metrics">
+        <div>
+          <div class="label">방해지수 I (raw)</div>
+          <div id="iRaw" class="value">-</div>
+        </div>
+        <div>
+          <div class="label">I (dB 환산)</div>
+          <div id="iDb" class="value">-</div>
+        </div>
+        <div>
+          <div class="label">지배 주파수</div>
+          <div id="dominantFreq" class="value">-</div>
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="label">체감 방해도 (0-100, 참고용 매핑)</div>
+        <div class="score-bar-bg"><div id="scoreBar" class="score-bar-fill"></div></div>
+        <div id="scoreValue" class="value">-</div>
+      </div>
+
+      <div class="source-row">
+        <div class="label">추정 소음 원인</div>
+        <div id="sourceLabel" class="value">-</div>
+        <div id="sourceDesc" class="desc"></div>
+      </div>
+
+      <canvas id="spectrumCanvas" width="640" height="160"></canvas>
+    </section>
+
+    <section class="panel">
+      <h2>파라미터 (실험/환경에 따라 조정)</h2>
+      <div class="param-row">
+        <label for="fc">벽 차단주파수 f_c</label>
+        <input type="range" id="fc" min="50" max="1000" step="10" />
+        <span id="fcValue"></span>
+      </div>
+      <div class="param-row">
+        <label for="f0">저주파 보정 경계 f_0</label>
+        <input type="range" id="f0" min="50" max="1000" step="10" />
+        <span id="f0Value"></span>
+      </div>
+      <div class="param-row">
+        <label for="gamma">저주파 비선형 지수 γ</label>
+        <input type="range" id="gamma" min="0.1" max="3" step="0.1" />
+        <span id="gammaValue"></span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>소음 신고 기록</h2>
+      <p class="note">
+        "신고" 버튼은 현재 측정값을 기기 내(localStorage)에 기록만 합니다. 실제 지자체/기관 신고 시스템으로
+        자동 접수되지는 않으며, CSV로 내보내 별도 신고에 첨부 자료로 활용하는 용도입니다.
+      </p>
+      <div class="controls">
+        <button id="reportBtn" disabled>현재 측정값 신고 기록에 추가</button>
+        <button id="exportBtn">CSV로 내보내기</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>시각</th>
+            <th>체감 점수</th>
+            <th>I(dB)</th>
+            <th>지배 주파수</th>
+            <th>추정 원인</th>
+          </tr>
+        </thead>
+        <tbody id="reportsBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
